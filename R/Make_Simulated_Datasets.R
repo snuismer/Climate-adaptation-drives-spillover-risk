@@ -1,13 +1,7 @@
 library(optimx)
 library(rootSolve)
 library(tidyverse)
-library(ggpubr)
 library(numDeriv)
-library(gridExtra)
-library(grid)
-library(parallel)
-library(doParallel)
-library(foreach)
 library(dplyr)
 
 # Fixed parameter values
@@ -246,6 +240,7 @@ for(j in 1:set){
   sim_pars_list[[j]] <- sim_pars
   print(j)
 }
+
 
 
 
