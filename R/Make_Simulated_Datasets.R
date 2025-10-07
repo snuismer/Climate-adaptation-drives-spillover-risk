@@ -11,7 +11,7 @@ mu_bovine=1/(6*365)
 mu_camel=1/(16*365)
 delta=1/21
 
-# Ordinary differential equation models in rootsolve for each county
+# Ordinary differential equation model 3 in rootsolve for each county
 
 ####Marsabit
 initial_MAR = c(Sw=100, Sx=100, Sy=100, Sz=100,
@@ -240,7 +240,6 @@ for(j in 1:set){
   sim_pars_list[[j]] <- sim_pars
   print(j)
 }
-
 
 
 
