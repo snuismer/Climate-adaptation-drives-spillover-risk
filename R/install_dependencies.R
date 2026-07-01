@@ -10,6 +10,7 @@ install.packages(
     "rootSolve",
     "numDeriv",
     "latex2exp",
-    "ggpubr"
+    "ggpubr",
+    "tinytable"
     )
   )

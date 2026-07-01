@@ -2,6 +2,7 @@ library(tidyverse)
 library(ggtext)
 library(optimx)
 library(scales)
+library(tinytable)
 
 #==============================================================================
 
@@ -198,11 +199,67 @@ write_csv(v, file = "Data/Clean/village_level_data_w_FOI.csv")
 #==============================================================================
 
 
-# Linear modeling
+# Make a table of primary data
 
 # Import village-level data with FOI information
 
 v <- read_csv("Data/Clean/village_level_data_w_FOI.csv")
+
+# Generate table
+
+v %>%
+  mutate(
+    livestock_seroprevalence = 
+      (n_positive_bovine + n_positive_camel + n_positive_goat + n_positive_sheep) / n_tested_livestock
+  ) %>%
+  mutate(
+    size_camel = paste0(size_camel, " (", round(prop_camel, digits = 2), ")"),
+    size_bovine = paste0(size_bovine, " (", round(prop_bovine, digits = 2), ")"),
+    size_goat = paste0(size_goat, " (", round(prop_goat, digits = 2), ")"),
+    size_sheep = paste0(size_sheep, " (", round(prop_sheep, digits = 2), ")"),
+    livestock_seroprevalence = paste0(
+      round(livestock_seroprevalence, digits = 3), " (", n_tested_livestock, ")"
+    ),
+    human_seroprevalence = paste0(
+      round(seroprevalence, digits = 3), " (", n_tested_human, ")"
+    ),
+    lambda = round(lambda, digits = 3)
+  ) %>%
+  rename(
+    Village = village,
+    Camel = size_camel,
+    Cattle = size_bovine,
+    Goat = size_goat,
+    Sheep = size_sheep,
+    "*Brucella* seroprevalence in livestock (no. tested)" = livestock_seroprevalence,
+    "*Brucella* seroprevalence in humans (no. tested)" = human_seroprevalence,
+    "Estimated *Brucella* FOI into humans" = lambda
+  ) %>%
+  select(
+    Village, 
+    Camel, Cattle, Goat, Sheep,
+    `*Brucella* seroprevalence in livestock (no. tested)`,
+    `*Brucella* seroprevalence in humans (no. tested)`,
+  ) %>%
+  tt() %>%
+  group_tt(
+    i = list(
+      "*Kajiado County*" = 1,
+      "*Marsabit County*" = 9
+    ),
+    j = list(
+      "Livestock count (prop. of village herd)" = 2:5
+    )
+  ) %>%
+  style_tt(i = c(1, 10), background = "tan") %>%
+  style_tt(j = 2:7, align = "c") %>%
+  format_tt(markdown = TRUE) %>%
+  save_tt("Figures/table.tex", overwrite = TRUE)
+
+#==============================================================================
+
+
+# Linear modeling
 
 # Fit simpler linear models
 
