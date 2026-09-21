@@ -251,7 +251,7 @@ v %>%
       "Livestock count (prop. of village herd)" = 2:5
     )
   ) %>%
-  style_tt(i = c(1, 10), background = "tan") %>%
+  style_tt(i = 10, line = "t") %>%
   style_tt(j = 2:7, align = "c") %>%
   format_tt(markdown = TRUE) %>%
   save_tt("Figures/table.tex", overwrite = TRUE)
@@ -263,16 +263,16 @@ v %>%
 
 # Fit simpler linear models
 
-m.l <- glm(lambda ~ expected_herd_lifespan_s, data = v)
-m.c <- glm(lambda ~ county, data = v)
-m.lc <- glm(lambda ~ expected_herd_lifespan_s + county, data = v)
+m.l <- lm(lambda ~ expected_herd_lifespan_s, data = v)
+m.c <- lm(lambda ~ county, data = v)
+m.lc <- lm(lambda ~ expected_herd_lifespan_s + county, data = v)
 
 AICcmodavg::aictab(list(m.l, m.c, m.lc), modnames = c("lifespan", "county", "lifespan + county"))
 
 # Fit the model with an interaction between expected herd lifespan and county,
 # setting Marsabit county to the base case
 
-m.interaction <- glm(
+m.interaction <- lm(
   lambda ~ expected_herd_lifespan_s * county, 
   data = v %>% mutate(county = factor(county, levels = c("Marsabit", "Kajiado")))
 )
@@ -390,15 +390,21 @@ data.for.preds <- data.frame(
   )
 
 # Generate model-based predictions for these expected lifespan values
-predictions1 <- predict(m.interaction, newdata = data.for.preds, se.fit = TRUE)
+predictions1 <- predict(
+  m.interaction, 
+  newdata = data.for.preds, 
+  interval = "confidence",
+  level = 0.95
+) %>%
+  data.frame()
 
 predictions1 <- data.frame(
   county = data.for.preds$county,
   expected_herd_lifespan_s = data.for.preds$expected_herd_lifespan_s,
   expected_herd_lifespan = data.for.preds$expected_herd_lifespan,
   lambda = predictions1$fit,
-  lower_ci = predictions1$fit - (1.96 * predictions1$se.fit),
-  upper_ci = predictions1$fit + (1.96 * predictions1$se.fit)
+  lower_ci = predictions1$lwr,
+  upper_ci = predictions1$upr
 )
 
 # Plot
@@ -419,7 +425,7 @@ b <- ggplot(
     size = 4
   ) +
   scale_color_manual(
-    values = c("darkseagreen3", "firebrick")
+    values = c("darkseagreen3", "darkblue")
   ) +
   xlab("Expected herd lifespan") +
   ylab("*Brucella* FOI into humans") +
@@ -439,7 +445,7 @@ b <- ggplot(
     panel.grid.minor = element_blank()
   )
 
-ggsave("Outputs/human_FOI_vs_lifespan.jpg", plot = b, width = 8, height = 6)
+ggsave("Figures/human_FOI_vs_lifespan.jpg", plot = b, width = 8, height = 6)
 
 
 # Generate panel c, which will show the impact of increasing herd lifespan 
@@ -562,7 +568,14 @@ cowplot::plot_grid(
 )
 
 ggsave(
-  filename = "Outputs/human_FOI_vs_lifespan_multipanel.jpg",
+  filename = "Figures/human_FOI_vs_lifespan_multipanel.jpg",
+  height = 12,
+  width = 10,
+  units = "in"
+)
+
+ggsave(
+  filename = "Figures/human_FOI_vs_lifespan_multipanel.pdf",
   height = 12,
   width = 10,
   units = "in"
@@ -617,7 +630,7 @@ for(i in 1:nrow(sensitivity.lifespans)) {
     )
   
   # Fit the interaction model, given these expected herd lifespan values
-  m.replicate <- glm(
+  m.replicate <- lm(
     lambda ~ expected_herd_lifespan_replicate_s * county, 
     data = v.replicate %>% 
       mutate(county = factor(county, levels = c("Marsabit", "Kajiado")))
@@ -728,7 +741,7 @@ d.params %>%
   )
 
 ggsave(
-  filename = "Outputs/sensitivity_parameter_value_histogram.jpg",
+  filename = "Figures/sensitivity_parameter_value_histogram.jpg",
   height = 6,
   width = 8,
   units = "in"
@@ -747,7 +760,7 @@ d.params %>%
   )
 
 ggsave(
-  filename = "Outputs/sensitivity_p-value_value_histogram.jpg",
+  filename = "Figures/sensitivity_p-value_value_histogram.jpg",
   height = 6,
   width = 8,
   units = "in"
