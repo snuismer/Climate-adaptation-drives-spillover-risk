@@ -1,6 +1,6 @@
-# Human adaptation to climate change drives increased brucellosis spillover risk
+# Human adaptation to climate change drives increased pathogen spillover risk
 
-This repository includes data, R scripts, and Mathematica files required to reproduce the analyses reported in the manuscript *Human adaptation to climate change drives increased brucellosis spillover risk*. 
+This repository includes data, R scripts, and Mathematica files required to reproduce the analyses reported in the manuscript *Human adaptation to climate change drives increased pathogen spillover risk*. 
 
 ## The repository contains the following folders:
 
@@ -8,3 +8,10 @@ This repository includes data, R scripts, and Mathematica files required to repr
 - [`R`](/R/) - R scripts to test for relationships between expected livestock herd lifespan and the force of *Brucella* spillover into the human population, to fit the mathematical model to livestock seroprevalence data using maximum likelihood, and generate simulated data to test parameter recovery.
 - [`Mathematica`](/Mathematica/) - Mathematica file deriving basic mathematical results and performing numerical analyses.
 - [`Figures`](/Figures/) - Figure files presented in the manuscript.
+
+## Software requirements
+
+Analyses were performed using R and Wolfram Mathematica.
+
+R package dependencies are specified within the individual analysis scripts.
+The Mathematica notebook contains the analytical derivations and numerical analyses used in the manuscript.
