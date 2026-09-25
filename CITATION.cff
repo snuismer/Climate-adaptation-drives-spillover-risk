@@ -1,0 +1,48 @@
+cff-version: 1.2.0
+message: "If you use this code or data, please cite this repository and the associated manuscript."
+title: "Human adaptation to climate change drives increased pathogen spillover risk"
+type: software
+version: 1.0.0
+
+authors:
+  - family-names: Nuismer
+    given-names: Scott L.
+  - family-names: Muriuki
+    given-names: Waiguru
+  - family-names: Eskew
+    given-names: Evan A.
+  - family-names: Clancey
+    given-names: Erin
+  - family-names: Remien
+    given-names: Christopher H.
+  - family-names: Oketch
+    given-names: Dismas
+  - family-names: Omia
+    given-names: Dalmas Ochieng
+  - family-names: Njoroge
+    given-names: Ruth
+  - family-names: Khamadi
+    given-names: Samoel
+  - family-names: Ngere
+    given-names: Isaac
+  - family-names: Gachochi
+    given-names: John
+  - family-names: Njenga
+    given-names: M. Kariuki
+  - family-names: Osoro
+    given-names: Eric M.
+
+repository-code: "https://github.com/snuismer/Climate-adaptation-drives-spillover-risk"
+
+abstract: >
+  Data and code required to reproduce the analyses reported in the manuscript
+  "Human adaptation to climate change drives increased pathogen spillover risk."
+
+keywords:
+  - spillover
+  - climate change
+  - infectious disease
+  - zoonotic disease
+  - pathogen
+  - epidemiology
+
